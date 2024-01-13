@@ -3,9 +3,10 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract TokenSwap  {
+contract TokenSwap is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     IERC20 public tokenA;
@@ -15,7 +16,7 @@ contract TokenSwap  {
 
     event Swap(address indexed user, uint256 amountA, uint256 amountB);
 
-    constructor(address _tokenA, address _tokenB, uint256 _exchangeRate)  {
+    constructor(address _tokenA, address _tokenB, uint256 _exchangeRate) {
         tokenA = IERC20(_tokenA);
         tokenB = IERC20(_tokenB);
         exchangeRate = _exchangeRate;
