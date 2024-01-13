@@ -1,66 +1,24 @@
-## Foundry
+Design choices and features in the contract:
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+1.Modular Imports: The contract leverages OpenZeppelin contracts, importing modules like ReentrancyGuard, Ownable, IERC20, and SafeERC20, enhancing security and standardizing functionality.
 
-Foundry consists of:
+2.Precision Handling: The swapAToB and swapBToA functions ensure precision in the exchange rate calculations by using multiplication and division with 1e18 (18 decimal places).
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+3.Reentrancy Protection: The contract inherits from ReentrancyGuard to prevent reentrancy attacks during token transfers.
 
-## Documentation
+4.Ownable Contract: The contract inherits from Ownable, providing exclusive access to certain functions, such as setExchangeRate, to the owner.
 
-https://book.getfoundry.sh/
+5.Event Logging: The Swap event is emitted upon successful token swaps, allowing external systems to track and respond to swap activities.
 
-## Usage
+6.Constructor Initialization: The constructor initializes the contract with addresses for tokenA and tokenB, as well as an initial exchange rate.
 
-### Build
+7.External Rate Setter: The setExchangeRate function allows the owner to dynamically update the exchange rate, providing flexibility to adjust rates based on market conditions.
 
-```shell
-$ forge build
-```
+8.swapAToB Function: Converts tokenA to tokenB based on the specified exchange rate, ensuring that the contract holds sufficient tokenB balance before transferring the expected amount to the user.
 
-### Test
+9.swapBToA Function: Converts tokenB to tokenA, checking that the contract has enough tokenA balance before transferring the expected amount to the user.
 
-```shell
-$ forge test
-```
+10..SafeERC20 Usage: The SafeERC20 library is used for safe token transfers, protecting against potential vulnerabilities such as reentrancy attacks.
 
-### Format
+11.Require Statements: Various require statements are used to enforce conditions, such as verifying sufficient token balances before executing swaps.
 
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
